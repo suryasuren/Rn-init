@@ -1,6 +1,31 @@
-pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
-plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+// android/settings.gradle
+
+pluginManagement {
+    repositories {
+        // standard plugin repos
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+
+        // allow Gradle to resolve RN Gradle plugin and related artifacts from node_modules
+        maven { url uri("$rootDir/../node_modules/react-native/android") }
+        maven { url uri("$rootDir/../node_modules/@react-native-community/cli-platform-android/native_modules") }
+    }
+
+    // include the local gradle plugin shipped with RN
+    includeBuild("../node_modules/@react-native/gradle-plugin")
+}
+
+plugins {
+    id 'com.facebook.react.settings'
+}
+
+extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
+    ex.autolinkLibrariesFromCommand()
+}
+
 rootProject.name = 'Cinema_Mobile_App'
 include ':app'
+
+// keep the includeBuild as well (some setups expect both)
 includeBuild('../node_modules/@react-native/gradle-plugin')
