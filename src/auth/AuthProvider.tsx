@@ -1,17 +1,6 @@
-// src/auth/AuthProvider.tsx
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { getAccessToken, getRefreshToken, setTokens as tokenServiceSetTokens, clearTokens as tokenServiceClearTokens } from '../services/tokenService';
-
-type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
-
-type AuthContextValue = {
-  status: AuthStatus;
-  accessToken: string | null;
-  refreshToken: string | null;
-  signIn: (accessToken: string, refreshToken: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  refreshState: () => Promise<void>;
-};
+import { AuthContextValue, AuthStatus } from '../navigation/types';
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -61,7 +50,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // public API
   const signIn = async (aToken: string, rToken: string) => {
-    // store tokens securely then update in-memory state
     await tokenServiceSetTokens(aToken, rToken);
     safeSet(setAccessToken, aToken);
     safeSet(setRefreshToken, rToken);
@@ -69,7 +57,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
-    // clear token storage then update state
     await tokenServiceClearTokens();
     safeSet(setAccessToken, null);
     safeSet(setRefreshToken, null);

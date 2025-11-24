@@ -2,7 +2,7 @@
 export const Url = {
   // BASE_URL: 'http://192.168.0.113:8080/api',
   BASE_URL: 'http://cinemademoapi.wrapoh.in:5000/api',
-//   BASE_URL: 'http://192.168.0.124:8080/api',
+  //   BASE_URL: 'http://192.168.0.124:8080/api',
 };
 
 export const Api = {

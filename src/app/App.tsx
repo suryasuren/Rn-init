@@ -8,6 +8,7 @@ import {
   Platform,
   ImageSourcePropType,
 } from "react-native";
+import GestureHandlerRootView from "react-native-gesture-handler/src/components/GestureHandlerRootView";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "../screens/SplashScreen";
 import MainNavigator from "../navigation/MainNavigator";
@@ -67,11 +68,14 @@ export default function App() {
   }, []);
 
   return (
+
     <ToastProvider>
       <AuthProvider>
+        <GestureHandlerRootView>
         <SafeAreaProvider>
           <AppInner splashBackgroundSource={splashBackgroundSource} />
         </SafeAreaProvider>
+        </GestureHandlerRootView>
       </AuthProvider>
     </ToastProvider>
   );

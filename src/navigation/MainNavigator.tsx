@@ -1,65 +1,45 @@
-import React from 'react';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import type { FC } from 'react';
-import WelcomeScreen from '../screens/WelcomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
-import { useAuth } from '../auth/AuthProvider';
-import { RootStackParamList } from './types';
-import { View, ActivityIndicator } from 'react-native';
+import React from "react";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import WelcomeScreen from "../screens/WelcomeScreen";
+import LoginScreen from "../screens/LoginScreen";
+import { useAuth } from "../auth/AuthProvider";
+import DrawerNavigator from "./DrawerNavigator";
+import { View, ActivityIndicator } from "react-native";
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator();
 
-const AppTheme = {
+const theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#fff',
+    background: "#fff",
   },
 };
 
-const RootNavigatorContent: FC = () => {
+export default function MainNavigator() {
   const auth = useAuth();
 
-  if (auth.status === 'loading') {
+  if (auth.status === "loading") {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' }}>
-        <ActivityIndicator size="large" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#000" }}>
+        <ActivityIndicator size="large" color="#fff" />
       </View>
     );
   }
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade',           
-        animationDuration: 300,
-        gestureEnabled: true,
-        presentation: 'card',
-      }}
-    >
-      {auth.status === 'authenticated' ? (
-        <>
-          <Stack.Screen name="Home" component={HomeScreen} />
-        </>
-      ) : (
-        <>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-        </>
-      )}
-    </Stack.Navigator>
-  );
-};
-
-const MainNavigator: FC = () => {
-  return (
-    <NavigationContainer theme={AppTheme}>
-      <RootNavigatorContent />
+    <NavigationContainer theme={theme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {auth.status === "authenticated" ? (
+          <Stack.Screen name="Main" component={DrawerNavigator} />
+        ) : (
+          <>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+          </>
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-export default MainNavigator;
+}
